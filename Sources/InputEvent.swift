@@ -18,6 +18,8 @@ public class InputEventCenter {
 	
 	public var couldNotRead: ((_ reason: String) -> Void)?
 	
+	let queue = DispatchQueue(label: "Input device event loop")
+	
 	public init(devicePath: String) throws {
 		#if os(Linux)
 		let device = open(devicePath, O_RDONLY)
@@ -28,7 +30,7 @@ public class InputEventCenter {
 			)
 		}
 		
-		DispatchQueue(label: "Input device event loop").async {
+		queue.async {
 			var event = input_event()
 			while true {
 				guard read(device, &event, MemoryLayout<input_event>.size) != -1 else {
