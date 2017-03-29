@@ -4,7 +4,7 @@
 	import Darwin
 #endif
 
-enum KeyboardError: Error {
+public enum KeyboardError: Error {
 	case CannotOpen(fileDescriptor: String, reason: String),
 	CannotRead(reason: String)
 }

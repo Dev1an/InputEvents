@@ -28,7 +28,7 @@ public class InputEventCenter {
 			)
 		}
 		
-		DispatchQueue.global().async {
+		DispatchQueue(label: "Input device event loop").async {
 			var event = input_event()
 			while true {
 				guard read(device, &event, MemoryLayout<input_event>.size) != -1 else {
