@@ -4,7 +4,7 @@ import Dispatch
 
 let keyEvent = UInt16(EV_KEY)
 
-typealias KeyEventHandler = ((UInt16) -> Void)
+public typealias KeyEventHandler = ((UInt16) -> Void)
 
 public class InputEventCenter {
 	public var keyPressed:  KeyEventHandler?
