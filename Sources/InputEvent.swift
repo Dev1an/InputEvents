@@ -1,8 +1,13 @@
-import Glibc
-import CLinuxInput
-import Dispatch
+#if os(Linux)
+	import Glibc
+	import CLinuxInput
 
-let keyEvent = UInt16(EV_KEY)
+	let keyEvent = UInt16(EV_KEY)
+#elseif os(macOS)
+	import Darwin
+#endif
+
+import Dispatch
 
 public typealias KeyEventHandler = ((UInt16) -> Void)
 
@@ -14,6 +19,7 @@ public class InputEventCenter {
 	public var couldNotRead: ((_ reason: String) -> Void)?
 	
 	public init(devicePath: String) throws {
+		#if os(Linux)
 		let device = open(devicePath, O_RDONLY)
 		guard device != -1 else {
 			throw KeyboardError.CannotOpen(
@@ -46,5 +52,6 @@ public class InputEventCenter {
 				}
 			}
 		}
+		#endif
 	}
 }

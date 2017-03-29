@@ -1,4 +1,8 @@
-import Glibc
+#if os(Linux)
+	import Glibc
+#elseif os(macOS)
+	import Darwin
+#endif
 
 enum KeyboardError: Error {
 	case CannotOpen(fileDescriptor: String, reason: String),
