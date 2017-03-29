@@ -6,14 +6,14 @@ let keyEvent = UInt16(EV_KEY)
 
 typealias KeyEventHandler = ((UInt16) -> Void)
 
-class InputEventCenter {
-	var keyPressed:  KeyEventHandler?
-	var keyReleased: KeyEventHandler?
-	var keyRepeated: KeyEventHandler?
+public class InputEventCenter {
+	public var keyPressed:  KeyEventHandler?
+	public var keyReleased: KeyEventHandler?
+	public var keyRepeated: KeyEventHandler?
 	
-	var couldNotRead: ((_ reason: String) -> Void)?
+	public var couldNotRead: ((_ reason: String) -> Void)?
 	
-	init(devicePath: String) throws {
+	public init(devicePath: String) throws {
 		let device = open(devicePath, O_RDONLY)
 		guard device != -1 else {
 			throw KeyboardError.CannotOpen(
