@@ -22,38 +22,43 @@ public class InputEventCenter {
 	
 	public init(devicePath: String) throws {
 		#if os(Linux)
-		let device = open(devicePath, O_RDONLY)
-		guard device != -1 else {
-			throw KeyboardError.CannotOpen(
-				fileDescriptor: devicePath,
-				reason: errorString()
-			)
-		}
-		
-		queue.async {
-			var event = input_event()
-			while true {
-				guard read(device, &event, MemoryLayout<input_event>.size) != -1 else {
-					self.couldNotRead?(errorString())
-					break
-				}
-				
-				if event.type == keyEvent {
-					let handler: KeyEventHandler?
-					switch event.value {
-					case 0:
-						handler = self.keyReleased
-					case 1:
-						handler = self.keyPressed
-					case 2:
-						handler = self.keyRepeated
-					default:
-						handler = nil
+			let device = open(devicePath, O_RDONLY)
+			guard device != -1 else {
+				throw KeyboardError.CannotOpen(
+					fileDescriptor: devicePath,
+					reason: errorString()
+				)
+			}
+			
+			queue.async {
+				var event = input_event()
+				while true {
+					guard read(device, &event, MemoryLayout<input_event>.size) != -1 else {
+						self.couldNotRead?(errorString())
+						break
 					}
-					handler?(event.code)
+					
+					if event.type == keyEvent {
+						let handler: KeyEventHandler?
+						switch event.value {
+						case 0:
+							handler = self.keyReleased
+						case 1:
+							handler = self.keyPressed
+						case 2:
+							handler = self.keyRepeated
+						default:
+							handler = nil
+						}
+						handler?(event.code)
+					}
 				}
 			}
-		}
+		#else
+			throw KeyboardError.CannotOpen(
+				fileDescriptor: devicePath,
+				reason: "Input devices are not supported on macOS"
+			)
 		#endif
 	}
 }
