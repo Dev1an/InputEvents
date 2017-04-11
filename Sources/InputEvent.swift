@@ -9,9 +9,9 @@ let keyEvent = UInt16(EV_KEY)
 	
 	func eventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
 		let center = Unmanaged<InputEventCenter>.fromOpaque(refcon!).takeUnretainedValue();
-		if type == .keyDown, let key = Key(rawValue: event.getIntegerValueField(.keyboardEventKeycode)) {
+		if type == .keyDown, let key = Key(code: event.getIntegerValueField(.keyboardEventKeycode)) {
 			center.keyPressed?(key)
-		} else if type == .keyUp, let key = Key(rawValue: event.getIntegerValueField(.keyboardEventKeycode)) {
+		} else if type == .keyUp, let key = Key(code: event.getIntegerValueField(.keyboardEventKeycode)) {
 			center.keyReleased?(key)
 		}
 		return Unmanaged.passRetained(event)
@@ -61,7 +61,7 @@ public class InputEventCenter {
 						default:
 							handler = nil
 						}
-						if let key = Key(rawValue: event.code) {
+						if let key = Key(code: event.code) {
 							handler?(key)
 						}
 					}

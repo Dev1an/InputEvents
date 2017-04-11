@@ -6,13 +6,13 @@
 	typealias KeyCode = Int64
 #endif
 
-public enum Key {
+public enum Key: String {
 	case f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
 	downArrow, upArrow, leftArrow, rightArrow,
 	space, escape
 	
-	init?(rawValue: KeyCode) {
-		if let key = keyMap[rawValue] {
+	init?(code: KeyCode) {
+		if let key = keyMap[code] {
 			self = key
 		} else {
 			return nil
