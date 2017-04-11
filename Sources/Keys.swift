@@ -1,6 +1,6 @@
 #if os(Linux)
 	import CLinuxInput
-	typealias KeyCode = Int32
+	typealias KeyCode = UInt16
 #elseif os(macOS)
 	import Carbon.HIToolbox
 	typealias KeyCode = Int
@@ -22,26 +22,26 @@ public enum Key {
 
 #if os(Linux)
 	let keyMap: [KeyCode: Key] = [
-		KEY_F1: .f1,
-		KEY_F2: .f2,
-		KEY_F3: .f3,
-		KEY_F4: .f4,
-		KEY_F5: .f5,
-		KEY_F6: .f6,
-		KEY_F7: .f7,
-		KEY_F8: .f8,
-		KEY_F9: .f9,
-		KEY_F10: .f10,
-		KEY_F11: .f11,
-		KEY_F12: .f12,
+		KeyCode(KEY_F1): .f1,
+		KeyCode(KEY_F2): .f2,
+		KeyCode(KEY_F3): .f3,
+		KeyCode(KEY_F4): .f4,
+		KeyCode(KEY_F5): .f5,
+		KeyCode(KEY_F6): .f6,
+		KeyCode(KEY_F7): .f7,
+		KeyCode(KEY_F8): .f8,
+		KeyCode(KEY_F9): .f9,
+		KeyCode(KEY_F10): .f10,
+		KeyCode(KEY_F11): .f11,
+		KeyCode(KEY_F12): .f12,
 		
-		KEY_UP: .upArrow,
-		KEY_DOWN: .downArrow,
-		KEY_LEFT: .leftArrow,
-		KEY_RIGHT: .rightArrow,
+		KeyCode(KEY_UP): .upArrow,
+		KeyCode(KEY_DOWN): .downArrow,
+		KeyCode(KEY_LEFT): .leftArrow,
+		KeyCode(KEY_RIGHT): .rightArrow,
 		
-		KEY_SPACE: .space,
-		KEY_ESC: .escape
+		KeyCode(KEY_SPACE): .space,
+		KeyCode(KEY_ESC): .escape
 	]
 #elseif os(macOS)
 	let keyMap: [KeyCode: Key] = [
