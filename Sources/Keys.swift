@@ -9,7 +9,7 @@
 public enum Key: String {
 	case f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
 	downArrow, upArrow, leftArrow, rightArrow,
-	space, escape
+	space, escape, backspace
 	
 	init?(code: KeyCode) {
 		if let key = keyMap[code] {
@@ -41,7 +41,8 @@ public enum Key: String {
 		KeyCode(KEY_RIGHT): .rightArrow,
 		
 		KeyCode(KEY_SPACE): .space,
-		KeyCode(KEY_ESC): .escape
+		KeyCode(KEY_ESC): .escape,
+		KeyCode(KEY_BACKSPACE): .backspace
 	]
 #elseif os(macOS)
 	let keyMap: [KeyCode: Key] = [
@@ -64,6 +65,7 @@ public enum Key: String {
 		KeyCode(kVK_RightArrow): .rightArrow,
 		
 		KeyCode(kVK_Space): .space,
-		KeyCode(kVK_Escape): .escape
+		KeyCode(kVK_Escape): .escape,
+		KeyCode(kVK_Delete): .backspace
 	]
 #endif
