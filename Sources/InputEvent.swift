@@ -1,16 +1,28 @@
 #if os(Linux)
 	import Glibc
 	import CLinuxInput
-
-	let keyEvent = UInt16(EV_KEY)
+	
+let keyEvent = UInt16(EV_KEY)
 #elseif os(macOS)
 	import Foundation
 	import Carbon.HIToolbox
+	
+	func eventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+		let center = Unmanaged<InputEventCenter>.fromOpaque(refcon!).takeUnretainedValue();
+		if type == .keyDown, let key = Key(rawValue: event.getIntegerValueField(.keyboardEventKeycode)) {
+			center.keyPressed?(key)
+		} else if type == .keyUp, let key = Key(rawValue: event.getIntegerValueField(.keyboardEventKeycode)) {
+			center.keyReleased?(key)
+		}
+		return Unmanaged.passRetained(event)
+	}
 #endif
 
 import Dispatch
 
 public typealias KeyEventHandler = ((Key) -> Void)
+
+
 
 public class InputEventCenter {
 	public var keyPressed:  KeyEventHandler?
@@ -51,14 +63,29 @@ public class InputEventCenter {
 						default:
 							handler = nil
 						}
-						if let handler = handler, let key = Key(rawValue: event.code) {
-							handler(key)
+						if let key = Key(rawValue: event.code) {
+							handler?(key)
 						}
 					}
 				}
 			}
-		#else
-
+		#elseif os(macOS)
+			let center = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque());
+			let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
+			guard let eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
+			                                       place: .headInsertEventTap,
+			                                       options: .defaultTap,
+			                                       eventsOfInterest: CGEventMask(eventMask),
+			                                       callback: eventCallback,
+			                                       userInfo: center) else {
+													print("failed to create event tap")
+													exit(1)
+			}
+			
+			let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+			CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+			CGEvent.tapEnable(tap: eventTap, enable: true)
+			CFRunLoopRun()
 		#endif
 	}
 }

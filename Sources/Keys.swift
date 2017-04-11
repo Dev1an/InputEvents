@@ -3,7 +3,7 @@
 	typealias KeyCode = UInt16
 #elseif os(macOS)
 	import Carbon.HIToolbox
-	typealias KeyCode = Int
+	typealias KeyCode = Int64
 #endif
 
 public enum Key {
@@ -45,25 +45,25 @@ public enum Key {
 	]
 #elseif os(macOS)
 	let keyMap: [KeyCode: Key] = [
-		kVK_F1: .f1,
-		kVK_F2: .f2,
-		kVK_F3: .f3,
-		kVK_F4: .f4,
-		kVK_F5: .f5,
-		kVK_F6: .f6,
-		kVK_F7: .f7,
-		kVK_F8: .f8,
-		kVK_F9: .f9,
-		kVK_F10: .f10,
-		kVK_F11: .f11,
-		kVK_F12: .f12,
+		KeyCode(kVK_F1): .f1,
+		KeyCode(kVK_F2): .f2,
+		KeyCode(kVK_F3): .f3,
+		KeyCode(kVK_F4): .f4,
+		KeyCode(kVK_F5): .f5,
+		KeyCode(kVK_F6): .f6,
+		KeyCode(kVK_F7): .f7,
+		KeyCode(kVK_F8): .f8,
+		KeyCode(kVK_F9): .f9,
+		KeyCode(kVK_F10): .f10,
+		KeyCode(kVK_F11): .f11,
+		KeyCode(kVK_F12): .f12,
 		
-		kVK_DownArrow: .downArrow,
-		kVK_UpArrow: .upArrow,
-		kVK_LeftArrow: .leftArrow,
-		kVK_RightArrow: .rightArrow,
+		KeyCode(kVK_DownArrow): .downArrow,
+		KeyCode(kVK_UpArrow): .upArrow,
+		KeyCode(kVK_LeftArrow): .leftArrow,
+		KeyCode(kVK_RightArrow): .rightArrow,
 		
-		kVK_Space: .space,
-		kVK_Escape: .escape
+		KeyCode(kVK_Space): .space,
+		KeyCode(kVK_Escape): .escape
 	]
 #endif
