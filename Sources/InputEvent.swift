@@ -4,12 +4,13 @@
 
 	let keyEvent = UInt16(EV_KEY)
 #elseif os(macOS)
-	import Darwin
+	import Foundation
+	import Carbon.HIToolbox
 #endif
 
 import Dispatch
 
-public typealias KeyEventHandler = ((UInt16) -> Void)
+public typealias KeyEventHandler = ((Key) -> Void)
 
 public class InputEventCenter {
 	public var keyPressed:  KeyEventHandler?
@@ -50,15 +51,14 @@ public class InputEventCenter {
 						default:
 							handler = nil
 						}
-						handler?(event.code)
+						if let handler = handler, let key = Key(rawValue: event.code) {
+							handler(key)
+						}
 					}
 				}
 			}
 		#else
-			throw KeyboardError.CannotOpen(
-				fileDescriptor: devicePath,
-				reason: "Input devices are not supported on macOS"
-			)
+
 		#endif
 	}
 }
