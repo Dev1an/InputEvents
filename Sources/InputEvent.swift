@@ -22,8 +22,6 @@ import Dispatch
 
 public typealias KeyEventHandler = ((Key) -> Void)
 
-
-
 public class InputEventCenter {
 	public var keyPressed:  KeyEventHandler?
 	public var keyReleased: KeyEventHandler?
@@ -70,22 +68,24 @@ public class InputEventCenter {
 				}
 			}
 		#elseif os(macOS)
-			let center = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque());
-			let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
-			guard let eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
-			                                       place: .headInsertEventTap,
-			                                       options: .defaultTap,
-			                                       eventsOfInterest: CGEventMask(eventMask),
-			                                       callback: eventCallback,
-			                                       userInfo: center) else {
-													print("failed to create event tap")
-													exit(1)
+			queue.async {
+				let center = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque());
+				let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
+				guard let eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
+				                                       place: .headInsertEventTap,
+				                                       options: .defaultTap,
+				                                       eventsOfInterest: CGEventMask(eventMask),
+				                                       callback: eventCallback,
+				                                       userInfo: center) else {
+														print("failed to create event tap")
+														exit(1)
+				}
+
+				let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+				CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+				CGEvent.tapEnable(tap: eventTap, enable: true)
+				CFRunLoopRun()
 			}
-			
-			let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-			CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-			CGEvent.tapEnable(tap: eventTap, enable: true)
-			CFRunLoopRun()
 		#endif
 	}
 }
