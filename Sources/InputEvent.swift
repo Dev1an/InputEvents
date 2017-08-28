@@ -5,15 +5,20 @@
 let keyEvent = UInt16(EV_KEY)
 #elseif os(macOS)
 	import Foundation
-	import Carbon.HIToolbox
 	
 	func eventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
 		let center = Unmanaged<InputEventCenter>.fromOpaque(refcon!).takeUnretainedValue();
+		
 		if type == .keyDown, let key = Key(code: event.getIntegerValueField(.keyboardEventKeycode)) {
-			center.keyPressed?(key)
+			if event.getIntegerValueField(.keyboardEventAutorepeat) == 0 {
+				center.keyPressed?(key)
+			} else {
+				center.keyRepeated?(key)
+			}
 		} else if type == .keyUp, let key = Key(code: event.getIntegerValueField(.keyboardEventKeycode)) {
 			center.keyReleased?(key)
 		}
+		
 		return Unmanaged.passRetained(event)
 	}
 #endif

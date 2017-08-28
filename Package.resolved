@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CLinuxInput",
+        "repositoryURL": "https://github.com/Dev1an/CLinuxInput.git",
+        "state": {
+          "branch": null,
+          "revision": "0bde950299623c7ad8c48945bedb2b3d6258f9b4",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
