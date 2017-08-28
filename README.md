@@ -28,7 +28,10 @@ To catch the other keys' events:
 
 # Technical details
 
-## macOS
+**macOS**
+
 Uses CoreGraphics' CGEventTaps to capture keyboard events.
-## Linux
+
+**Linux**
+
 Uses a device file descriptor (`/dev/input/...`) and the input event structs from `/usr/include/linux/input.h` to parse the contents of the file descriptor.
