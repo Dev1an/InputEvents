@@ -25,3 +25,10 @@ To catch the other keys' events:
    - [Linux keycode dictionary](https://github.com/Dev1an/InputEvents/blob/0750b8dca86a80945fc1b1a8a6ec2536d49627c6/Sources/Keys.swift#L24)
    - [macOS keycode dictionary](https://github.com/Dev1an/InputEvents/blob/0750b8dca86a80945fc1b1a8a6ec2536d49627c6/Sources/Keys.swift#L47)
 3) Please contribute your additions by requesting a pull via a "Github pull request"
+
+# Technical details
+
+## macOS
+Uses CoreGraphics' CGEventTaps to capture keyboard events.
+## Linux
+Uses a device file descriptor (`/dev/input/...`) and the input event structs from `/usr/include/linux/input.h` to parse the contents of the file descriptor.
