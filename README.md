@@ -5,7 +5,9 @@ import InputEvents
 
 // Create a keyboard observer.
 if let keyboard = try? InputEventCenter(devicePath: "/dev/input/event2") {
-    keyboard.keyPressed = { print($0, "pressed") }
+	keyboard.keyPressed  = { print($0, "👇") }
+	keyboard.keyRepeated = { print($0, "🔁") }
+	keyboard.keyReleased = { print($0, "☁️") }
 }
 
 // Prevent the application from exiting immediately
